@@ -1,0 +1,17 @@
+name: open_meteo
+type: rest
+description: Free weather forecasts, no API key needed
+base_url: https://api.open-meteo.com/v1
+auth: {type: none}
+timeout: 20
+retry: {attempts: 3}
+rate_limit: {per_minute: 60}
+operations:
+  forecast:
+    method: GET
+    path: /forecast
+    description: Current weather at a latitude and longitude
+    params:
+      latitude: {in: query, type: number, required: true}
+      longitude: {in: query, type: number, required: true}
+      current: {in: query, type: string, description: "Comma list, e.g. temperature_2m,wind_speed_10m"}

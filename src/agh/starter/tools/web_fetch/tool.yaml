@@ -1,0 +1,6 @@
+name: web_fetch
+description: "Fetch a public web page as text."
+readonly: true
+timeout: 45
+untrusted: true
+permission: allow

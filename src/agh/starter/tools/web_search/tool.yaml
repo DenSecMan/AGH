@@ -1,0 +1,6 @@
+name: web_search
+description: "Search the web. Returns titles, URLs and snippets; read the best results with web_fetch."
+readonly: true
+timeout: 45
+untrusted: true
+permission: allow

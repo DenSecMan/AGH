@@ -1,0 +1,5 @@
+default: ask
+# Reading private files and sending to any URL must not both run unattended, or a malicious page could leak data.
+allow: [read_file, list_dir, find_files, search_files, git, view_image, process]
+ask: [write_file, edit_file, shell, http_request, web_fetch]
+deny: []

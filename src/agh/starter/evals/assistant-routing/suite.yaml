@@ -1,0 +1,25 @@
+name: assistant-routing
+agent: assistant
+threshold: 1.0
+approve: deny
+concurrency: 3
+# Does the assistant send work to the right specialist? Uses your real model, and the researcher case uses the web.
+cases:
+  - id: research-goes-to-researcher
+    input: Find out which RFC currently defines HTTP semantics, and cite your sources.
+    expect:
+      - {type: python, function: delegated_to_researcher}
+  - id: building-goes-to-architect
+    input: Create a tool that reverses a string.
+    expect:
+      - {type: python, function: delegated_to_architect}
+  - id: simple-work-stays-here
+    input: What is 2 + 2?
+    expect:
+      - {type: tool_not_called, value: delegate}
+      - {type: contains, value: "4"}
+  - id: new-capability-is-offered-not-built
+    input: Can you add a way for yourself to read PDF files? I don't know what options exist.
+    expect:
+      - {type: tool_called, value: load_skill}
+      - {type: python, function: did_not_delegate_to_architect}

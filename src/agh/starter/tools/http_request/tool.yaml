@@ -1,0 +1,6 @@
+name: http_request
+description: "Make an arbitrary HTTP request to a public URL."
+readonly: false
+timeout: 45
+untrusted: true
+permission: ask

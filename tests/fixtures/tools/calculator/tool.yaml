@@ -1,0 +1,6 @@
+name: calculator
+description: "Evaluate an arithmetic expression safely."
+readonly: true
+timeout: 10
+untrusted: false
+permission: allow

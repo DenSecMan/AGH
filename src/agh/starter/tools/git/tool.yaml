@@ -1,0 +1,6 @@
+name: git
+description: "Read-only git: status, diff, log, show, blame, branch, ls-files."
+readonly: true
+timeout: 60
+untrusted: false
+permission: allow

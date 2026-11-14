@@ -1,0 +1,6 @@
+name: view_image
+description: "Look at an image file (png, jpg, gif, webp) in the workspace."
+readonly: true
+timeout: 30
+untrusted: true
+permission: allow

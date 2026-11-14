@@ -1,0 +1,22 @@
+name: architect-live
+agent: architect
+threshold: 1.0
+approve: deny
+concurrency: 3
+# Uses your real model. approve: deny means build calls are refused, so this tests what the architect tries to do
+# and changes nothing in the workspace. Real builds are tested by each element's own release test.
+cases:
+  - id: looks-before-building
+    input: Create a read-only tool named shout that uppercases text.
+    expect:
+      - {type: python, function: lists_elements_first}
+      - {type: python, function: loads_build_tool_before_creating}
+  - id: changes-an-agent-in-place
+    input: Give the assistant agent the web_search tool.
+    expect:
+      - {type: tool_called, value: update_agent}
+      - {type: tool_not_called, value: create_agent}
+  - id: builds-dependencies-first
+    input: Create an agent named shouter that uses a new tool named shout, which uppercases text.
+    expect:
+      - {type: python, function: creates_tool_before_agent}

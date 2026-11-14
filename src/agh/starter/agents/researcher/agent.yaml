@@ -1,0 +1,16 @@
+name: researcher
+description: "Researches questions on the web and reports findings with sources. It cannot read workspace files, so put any excerpts it needs in the task."
+model: auto
+fallbacks: []
+model_params: {}
+tools: [web_search, web_fetch]
+system_tools: [plan]
+skills: []
+connectors: []
+subagents: []
+limits:
+  max_steps: 15
+  timeout_s: 300
+memory:
+  enabled: false   # it reads untrusted pages, so it gets nothing private to leak and no way to plant memories
+project_instructions: false   # AGENTS.md may hold private project details; this agent reads the open web

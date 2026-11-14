@@ -1,0 +1,29 @@
+# AGH workspace settings. Everything else lives in its own directory.
+default_agent: assistant
+models:
+  default: auto   # auto picks by API key, or use e.g. anthropic:claude-opus-5-5, openai:<model>, ollama:llama3.2
+  fast: auto      # used for compaction and memory reflection
+  # reasoning: auto # agents opt in with `model: reasoning`
+  # A list is tried in order, skipping providers with no key: default: [anthropic:claude-opus-5-5, ollama:llama3.2]
+  # providers: [azure_openai, anthropic, openai]  # the order auto tries them; change with `agh models priority`
+  # Azure: auto uses AZURE_OPENAI_DEPLOYMENT_NAME_*, or set azure_openai:<deployment>
+agents:
+  max_depth: 3    # how deep delegation may nest
+memory:
+  embeddings: null   # e.g. openai:text-embedding-3-small turns on hybrid search
+sandbox:
+  extra_paths: []    # directories outside this workspace that file tools may touch
+  # shell: docker            # run shell commands in a throwaway container that sees only this workspace
+  # image: python:3.12-slim
+  # network: false           # the container has no network unless true
+  # allowed_domains: []      # if set, tool calls with a url may only reach these hosts and their subdomains
+# triggers:                  # run by `agh serve`; each run is appended to state/triggers/<name>.jsonl
+#   - {name: morning-digest, every: 24h, agent: assistant, prompt: "Summarise yesterday's changes in notes/."}
+language:            # edit_file/write_file report diagnostics for the file they changed; missing tools are skipped
+  enabled: true
+  format_on_write: false   # true runs the formatter after each write
+  timeout: 30
+  project_tools: false     # true also finds tools in the project's own .venv and node_modules/.bin (trust the repo first)
+  # checkers:              # replaces the built-in set (ruff, prettier/eslint, gofmt/go vet, rustfmt); {file}, {dir}
+  #   python: {extensions: [.py], format: "ruff format {file}", diagnostics: "pyright {file}"}
+pricing: {}          # model: {input: <usd per Mtok>, output: <usd per Mtok>}; enables cost tracking and budgets

@@ -1,0 +1,20 @@
+name: researcher-live
+agent: researcher
+threshold: 1.0
+approve: deny
+concurrency: 2
+# Uses your real model and the web. Results can vary with what search returns.
+cases:
+  - id: answers-with-fetched-sources
+    input: Which RFC currently defines HTTP semantics?
+    expect:
+      - {type: tool_called, value: web_search}
+      - {type: tool_called, value: web_fetch}
+      - {type: contains, value: "9110"}
+      - {type: python, function: has_report_sections}
+      - {type: python, function: cites_a_fetched_page}
+  - id: admits-what-it-cannot-confirm
+    input: Exactly how many people visited example.com on 3 February 2019?
+    expect:
+      - {type: python, function: has_report_sections}
+      - {type: llm_judge, criteria: "Says the figure could not be found or confirmed, and gives no invented number."}

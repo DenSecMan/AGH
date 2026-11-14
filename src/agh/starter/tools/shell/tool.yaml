@@ -1,0 +1,6 @@
+name: shell
+description: "Run a shell command in the workspace."
+readonly: false
+timeout: 600
+untrusted: false
+permission: ask

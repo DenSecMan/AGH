@@ -1,0 +1,4 @@
+default: ask
+allow: [web_search, web_fetch]
+ask: []
+deny: []

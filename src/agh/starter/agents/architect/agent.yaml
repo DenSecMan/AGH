@@ -1,0 +1,17 @@
+name: architect
+description: "Creates and changes the harness itself: agents, skills, tools, connectors, hooks and eval suites."
+model: reasoning   # it writes code that runs with the user's rights; a selected provider or model overrides this
+fallbacks: []
+model_params: {}
+tools: [read_file, list_dir, find_files, search_files, git]
+system_tools: [builder, skills, plan, memory, delegate]
+skills: ["*", "!discover-capabilities"]
+connectors: []
+subagents: [researcher]
+limits:
+  max_steps: 50
+  timeout_s: 1800   # one release test can take 600s, and a build gets three attempts
+memory:
+  enabled: true
+  recall_k: 5
+  reflect_every: 0

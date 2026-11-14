@@ -1,0 +1,5 @@
+name: block_dangerous_shell
+description: Refuses shell commands that are destructive regardless of approval
+events: [pre_tool]
+tools: shell
+enabled: true

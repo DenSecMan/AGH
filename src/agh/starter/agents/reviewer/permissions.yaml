@@ -1,0 +1,4 @@
+default: deny
+allow: [read_file, list_dir, find_files, search_files, git]
+ask: []
+deny: []

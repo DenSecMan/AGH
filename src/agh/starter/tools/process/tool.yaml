@@ -1,0 +1,6 @@
+name: process
+description: "List, read the output of, or stop background commands started with shell(background=true)."
+readonly: false
+timeout: 30
+untrusted: false
+permission: allow

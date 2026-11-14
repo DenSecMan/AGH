@@ -1,0 +1,6 @@
+name: list_dir
+description: "List a directory."
+readonly: true
+timeout: 30
+untrusted: false
+permission: allow

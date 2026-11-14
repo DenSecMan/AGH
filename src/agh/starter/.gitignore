@@ -1,0 +1,9 @@
+.env
+state/
+memory.db
+results/
+.agh-backups/
+data/
+profiles/default/
+profiles/.draft/
+exports/

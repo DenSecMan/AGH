@@ -1,0 +1,6 @@
+name: search_files
+description: "Regex search across workspace files."
+readonly: true
+timeout: 60
+untrusted: false
+permission: allow

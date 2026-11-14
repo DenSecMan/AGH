@@ -1,0 +1,5 @@
+name: write_file
+description: "Create or overwrite a text file."
+readonly: false
+timeout: 120  # includes language feedback (formatter + diagnostics)
+untrusted: false

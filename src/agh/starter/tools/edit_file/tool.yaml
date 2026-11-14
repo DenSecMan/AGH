@@ -1,0 +1,5 @@
+name: edit_file
+description: "Replace one exact string in a file."
+readonly: false
+timeout: 120  # includes language feedback (formatter + diagnostics)
+untrusted: false

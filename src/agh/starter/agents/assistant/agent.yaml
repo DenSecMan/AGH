@@ -1,0 +1,21 @@
+name: assistant
+description: "General assistant that plans, uses tools, changes code in a repository, and delegates specialist work."
+model: auto
+fallbacks: []
+model_params: {}
+# "*" picks up tools, connectors and agents added later, on the next turn. New ones that reach outside ask
+# before running, as this agent reads files unattended (see policy.guard_leaks).
+tools: ["*"]
+system_tools: [memory, skills, plan, delegate]   # add ui to let it change theme and layout; /theme and /layout do that already
+skills: ["*", "!build-*", "!write-evals"]
+# Needed on almost every task, so they sit in the prompt (cached) instead of costing a load_skill call each.
+preload_skills: [caveman, implementation-workflow, verification-before-completion]
+connectors: ["*"]
+subagents: ["*"]
+limits:
+  max_steps: 0      # 0 = no step cap; timeout_s still bounds a runaway turn
+  timeout_s: 3600   # its subagents' time counts too, and a build can take most of this
+memory:
+  enabled: true
+  recall_k: 5
+  reflect_every: 0

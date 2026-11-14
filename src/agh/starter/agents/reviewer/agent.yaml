@@ -1,0 +1,15 @@
+name: reviewer
+description: "Reviews a code change for correctness, regressions, security and maintainability. Read-only. Give it the requirement, the changed files and the diff."
+model: auto
+fallbacks: []
+model_params: {}
+tools: [read_file, list_dir, find_files, search_files, git]
+system_tools: [skills, plan]
+skills: [code-review, repository-orientation]
+connectors: []
+subagents: []
+limits:
+  max_steps: 30
+  timeout_s: 900
+memory:
+  enabled: false   # each review should judge the diff in front of it, not past impressions

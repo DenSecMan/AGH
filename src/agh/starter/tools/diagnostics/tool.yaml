@@ -1,0 +1,5 @@
+name: diagnostics
+description: "Run configured linters/type checkers (and optionally formatters) on files and report problems."
+readonly: false
+timeout: 300
+untrusted: false

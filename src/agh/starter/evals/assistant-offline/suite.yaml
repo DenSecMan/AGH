@@ -1,0 +1,30 @@
+name: assistant-offline
+agent: assistant
+threshold: 1.0
+approve: deny
+concurrency: 4
+# Mocked replies exercise the harness without an API key.
+cases:
+  - id: answers
+    input: Say hello.
+    mock: ["Hello there!"]
+    expect:
+      - {type: contains, value: hello}
+      - {type: max_steps, value: 1}
+  - id: uses-a-tool
+    input: What is in this folder?
+    mock:
+      - {tool_calls: [{name: list_dir, args: {path: "."}}]}
+      - "It holds the workspace files."
+    expect:
+      - {type: tool_called, value: list_dir}
+      - {type: no_tool_errors}
+      - {type: contains, value: workspace}
+  - id: write-needs-approval
+    input: Write a file.
+    mock:
+      - {tool_calls: [{name: write_file, args: {path: eval_output.txt, content: x}}]}
+      - "I could not write the file."
+    expect:
+      - {type: tool_called, value: write_file}
+      - {type: contains, value: could not}
