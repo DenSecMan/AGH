@@ -329,7 +329,7 @@ async def test_reflect_ignores_tool_output(ws):
 
 async def test_compaction_keeps_tool_pairs_valid_and_archives(ws):
     path = ws.writable("agents", "assistant") / "agent.yaml"
-    path.write_text(path.read_text().replace("timeout_s: 3600", "timeout_s: 3600\n  context_tokens: 1000"))
+    path.write_text(path.read_text().replace("timeout_s: 0 ", "context_tokens: 1000\n  timeout_s: 0 "))
     session = Session(ws=ws, agent="assistant")
     for i in range(12):
         session.messages += [HumanMessage(content="q" * 500), AIMessage(content="", tool_calls=[
@@ -346,7 +346,7 @@ async def test_compaction_keeps_tool_pairs_valid_and_archives(ws):
 
 async def test_stale_tool_output_cleared_oldest_first_back_to_half_the_context_limit(ws):
     path = ws.writable("agents", "assistant") / "agent.yaml"
-    path.write_text(path.read_text().replace("timeout_s: 3600", "timeout_s: 3600\n  context_tokens: 10000"))
+    path.write_text(path.read_text().replace("timeout_s: 0 ", "context_tokens: 10000\n  timeout_s: 0 "))
 
     def history(results):
         session = Session(ws=ws, agent="assistant")

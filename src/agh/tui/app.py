@@ -489,20 +489,25 @@ class AghApp(App[None]):
         else:
             state = "ready"
         now = engine.describe()
-        speed = (f" | {now['first_token_s']}s first token, {now['tokens_per_s']} tok/s"
-                 if "first_token_s" in now else "")
-        self.query_one("#status", Static).update(Text(
-            f"{self.ws.profile} | {engine.agent_name} | {now['provider']} / {now['model']} | effort: {now['effort']} (Ctrl+E){speed} | mode: {engine.mode} | ")
-            + self._token_meter() + Text(f" | {state}"))
+        effort_colors = {"high": "red", "medium": "yellow", "low": "green"}
+        mode_colors = {"default": "green", "plan": "cyan", "edits": "yellow", "auto": "dark_orange", "full-auto": "red"}
+        busy = self._busy()
+        sep = Text(" | ", style="dim")
+
+        def field(label: str, value: str, style: str) -> Text:
+            return Text(f"{label}=", style="bold dark_orange") + Text(value, style=style)
+
+        self.query_one("#status", Static).update(
+            field("Provider", str(now["provider"]), "bold")
+            + sep + field("Model", str(now["model"]), "bold")
+            + sep + field("Effort", str(now["effort"]), effort_colors.get(str(now["effort"]), "white"))
+            + sep + field("Mode", engine.mode, mode_colors.get(engine.mode, "white"))
+            + sep + self._token_meter()
+            + sep + field("Status", state, "yellow" if busy else "green"))
 
     def _token_meter(self) -> Text:
-        """Session ↑sent ↓received $cost | Last prompt ↑sent ↓received $cost | context fill."""
-        engine, usage, last = self.engine, self.engine.session.usage, self.engine.result
-        limit = engine.context_limit() or 1
-        fill = min(1.0, engine._estimate_tokens() / limit)
-        width = 10
-        filled = round(fill * width)
-        bar_style = "red" if fill >= 0.8 else "yellow" if fill >= 0.6 else "green"
+        """Session ↑sent ↓received $cost."""
+        usage = self.engine.session.usage
 
         def money(value: float) -> str:
             return f"${value:.2f}" if value >= 0.01 or value == 0 else f"${value:.4f}"
@@ -512,10 +517,7 @@ class AghApp(App[None]):
                     + Text(f"↓{_short(out)} ", style="green") + Text(money(cost), style="bold"))
 
         return (group("Session", int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0)),
-                      float(usage.get("cost_usd", 0.0)))
-                + Text(" | ", style="dim") + group("Last", last.input_tokens, last.output_tokens, last.cost_usd)
-                + Text(" | ", style="dim") + Text("█" * filled, style=bar_style)
-                + Text("░" * (width - filled), style="dim") + Text(f" {fill:.0%}", style="dim"))
+                      float(usage.get("cost_usd", 0.0))))
         self.sub_title = f"{engine.agent_name} / {engine.session.id}"
 
     def _busy(self) -> bool:

@@ -13,8 +13,8 @@ preload_skills: [caveman, implementation-workflow, verification-before-completio
 connectors: ["*"]
 subagents: ["*"]
 limits:
-  max_steps: 0      # 0 = no step cap; timeout_s still bounds a runaway turn
-  timeout_s: 3600   # its subagents' time counts too, and a build can take most of this
+  max_steps: 0      # 0 = no step cap
+  timeout_s: 0      # 0 = no time limit
 memory:
   enabled: true
   recall_k: 5

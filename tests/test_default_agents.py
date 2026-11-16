@@ -274,7 +274,7 @@ async def test_timeout_reports_too(ws, monkeypatch):
         await asyncio.sleep(30)
 
     monkeypatch.setattr(Engine, "_call_model", stuck)
-    set_limit(ws, "assistant", "timeout_s: 3600", "timeout_s: 0.05")
+    set_limit(ws, "assistant", "timeout_s: 0", "timeout_s: 0.05")
     result = await turn(Engine(ws, "assistant", model=ScriptedChatModel(responses=["partial"])))
     assert result.stop_reason == "timeout" and result.text == "partial"
 

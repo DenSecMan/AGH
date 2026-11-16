@@ -847,10 +847,11 @@ class Engine:
         self._recent_calls.clear()
         schema = spec.guardrails.get("output_schema")
         schema_retries = 0
-        limit = float(spec.limits.get("timeout_s", 900))
+        limit: float | None = float(spec.limits.get("timeout_s") or 0) or None  # 0 or unset: no time limit
         if self.parent and self.parent.deadline and not self.detached:  # report back before the parent's clock runs out
-            limit = max(min(limit, self.parent.deadline - time.monotonic() - WRAP_UP_TIMEOUT_S - REPORT_RESERVE_S), 1.0)
-        self.deadline = time.monotonic() + limit
+            budget = self.parent.deadline - time.monotonic() - WRAP_UP_TIMEOUT_S - REPORT_RESERVE_S
+            limit = max(min(limit, budget) if limit else budget, 1.0)
+        self.deadline = time.monotonic() + limit if limit else None
         try:
             async with asyncio.timeout(limit):
                 while True:
@@ -883,7 +884,7 @@ class Engine:
                         result.stop_reason, result.error = "schema_failed", "answer never matched output_schema"
                     break
         except TimeoutError:
-            result.stop_reason, result.error = "timeout", f"exceeded {limit:.0f}s"
+            result.stop_reason, result.error = "timeout", f"exceeded {(limit or 0):.0f}s"
         except asyncio.CancelledError:
             result.stop_reason, result.error = "cancelled", "cancelled by user"
             self.session.messages = repair_messages(self.session.messages)

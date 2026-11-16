@@ -25,7 +25,7 @@ from agh.workspace import Workspace, WorkspaceError, read_yaml, validate_name
 
 DEFAULT_LIMITS = {
     "max_steps": 50,
-    "timeout_s": 900,
+    "timeout_s": 0,  # 0 = no time limit
     # context_tokens: unset means what the model is known to take (llm.context_window). Old tool output is
     # cleared from 70% of it and the conversation summarized at 80%.
     "max_tool_result_chars": 20_000,
